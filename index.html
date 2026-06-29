@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barro – Biurka z regulacją wysokości na zamówienie</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            wood:    { DEFAULT: '#8B6F47', light: '#C4A882', dark: '#5C4A2A' },
+            cream:   '#FAF7F2',
+            charcoal:'#2C2C2C',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" />
+  <style>
+    html { scroll-behavior: smooth; }
+
+    #lightbox {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.88); z-index: 999;
+      align-items: center; justify-content: center;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img { max-width: 92vw; max-height: 90vh; object-fit: contain; border-radius: .5rem; }
+    #lb-close {
+      position: absolute; top: 1rem; right: 1.5rem;
+      color: #fff; font-size: 2.2rem; background: none;
+      border: none; cursor: pointer; line-height: 1; opacity: .8;
+    }
+    #lb-close:hover { opacity: 1; }
+
+    .color-tile-wrap.selected .color-tile-border {
+      border-color: #8B6F47;
+    }
+  </style>
+</head>
+<body class="bg-cream text-charcoal font-sans antialiased">
+
+<!-- LIGHTBOX -->
+<div id="lightbox" role="dialog" aria-modal="true">
+  <button id="lb-close" aria-label="Zamknij">&times;</button>
+  <img id="lb-img" src="" alt="" />
+</div>
+
+<!-- ── HEADER ── -->
+<header class="sticky top-0 z-50 bg-cream/90 backdrop-blur border-b border-wood-light/30">
+  <div class="max-w-5xl mx-auto px-5 py-3 flex items-center justify-between">
+    <a href="#top">
+      <img src="images/Barro.png" alt="Barro" class="h-10 w-auto" />
+    </a>
+    <nav class="hidden sm:flex gap-7 text-sm font-medium text-wood-dark">
+      <a href="#galeria"   class="hover:text-wood transition-colors">Produkt</a>
+      <a href="#kolory"    class="hover:text-wood transition-colors">Kolory</a>
+      <a href="#akcesoria" class="hover:text-wood transition-colors">Akcesoria</a>
+      <a href="#cennik"    class="hover:text-wood transition-colors">Cennik</a>
+      <a href="#kontakt"   class="hover:text-wood transition-colors">Kontakt</a>
+    </nav>
+    <button id="menu-btn" class="sm:hidden text-wood-dark" aria-label="Menu">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+  <div id="mobile-nav" class="sm:hidden hidden border-t border-wood-light/30 bg-cream">
+    <div class="flex flex-col px-5 py-3 gap-3 text-sm font-medium text-wood-dark">
+      <a href="#galeria"   onclick="closeMobileNav()" class="py-1">Produkt</a>
+      <a href="#kolory"    onclick="closeMobileNav()" class="py-1">Kolory</a>
+      <a href="#akcesoria" onclick="closeMobileNav()" class="py-1">Akcesoria</a>
+      <a href="#cennik"    onclick="closeMobileNav()" class="py-1">Cennik</a>
+      <a href="#kontakt"   onclick="closeMobileNav()" class="py-1">Kontakt</a>
+    </div>
+  </div>
+</header>
+
+<!-- ── HERO ── -->
+<section id="top" class="max-w-6xl mx-auto px-5 py-14 md:py-20 flex flex-col md:flex-row md:items-center gap-10 md:gap-14">
+  <!-- tekst po lewej -->
+  <div class="md:w-1/2">
+    <h1 class="text-2xl md:text-3xl lg:text-4xl font-light text-charcoal leading-snug mb-6">
+      Stelaże biurkowe i drewniane blaty<br class="hidden lg:block" /> na zamówienie
+    </h1>
+    <p class="text-wood-dark/70 text-[15px] leading-relaxed mb-4">
+      Stelaże biurkowe i drewniane blaty na zamówienie naszej firmy to jakość,
+      która tworzy przestrzeń do pracy lub domu.
+    </p>
+    <p class="text-wood-dark/70 text-[15px] leading-relaxed mb-4">
+      W Barro wierzymy, że dobrze zaprojektowane biurko potrafi zmienić
+      sposób, w jaki pracujesz każdego dnia.
+    </p>
+    <p class="text-wood-dark/70 text-[15px] leading-relaxed">
+      Dlatego łączymy solidne, nowoczesne stelaże biurkowe z drewnianymi
+      blatami wykonywanymi na zamówienie, tworząc meble, które łączą
+      ergonomię, trwałość i ponadczasowy design.
+    </p>
+    <div class="mt-8 flex flex-col sm:flex-row gap-3">
+      <a href="#cennik"
+         class="inline-block bg-wood text-white text-sm font-medium px-7 py-3 rounded hover:bg-wood-dark transition-colors text-center">
+        Zobacz cennik
+      </a>
+      <a href="#kontakt"
+         class="inline-block border border-wood text-wood text-sm font-medium px-7 py-3 rounded hover:bg-wood-light/15 transition-colors text-center">
+        Zapytaj o wycenę
+      </a>
+    </div>
+  </div>
+  <!-- zdjęcie po prawej -->
+  <div class="md:w-1/2 overflow-hidden rounded-2xl flex-shrink-0">
+    <img src="images/Hero shot.png"
+         alt="Biurko Barro z regulacją wysokości w aranżacji domowego biura"
+         class="w-full h-full object-cover"
+         style="max-height: 520px;" />
+  </div>
+</section>
+
+<!-- ── KOLORY ── -->
+<section id="kolory" class="bg-white py-16 px-5">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-2xl md:text-3xl font-light text-charcoal mb-1 text-center">Wybierz kolor blatu</h2>
+    <p class="text-wood-dark/70 text-[15px] leading-relaxed mt-3 mb-10 max-w-xl mx-auto text-center">
+      Każdy blat drewniany Barro powstaje w polskich, profesjonalnych stolarniach,
+      które specjalizują się m.in. w obróbce litego drewna.
+    </p>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
+
+      <!-- Czarny -->
+      <div class="color-tile-wrap cursor-pointer group" onclick="selectColor(this)">
+        <div class="color-tile-border overflow-hidden rounded-2xl border-2 border-transparent
+                    group-hover:border-wood-light transition-colors duration-200 bg-gray-50">
+          <img src="images/Czarny_w.png" alt="Czarny"
+               onclick="event.stopPropagation(); openLb('images/Czarny_w.png')"
+               class="w-full object-cover aspect-[3/4] group-hover:scale-105 transition-transform duration-500" />
+        </div>
+        <p class="mt-2 text-sm font-medium text-center text-charcoal">Czarny</p>
+      </div>
+
+      <!-- Szary -->
+      <div class="color-tile-wrap cursor-pointer group" onclick="selectColor(this)">
+        <div class="color-tile-border overflow-hidden rounded-2xl border-2 border-transparent
+                    group-hover:border-wood-light transition-colors duration-200 bg-gray-50">
+          <img src="images/Szary_jasny_w.png" alt="Szary"
+               onclick="event.stopPropagation(); openLb('images/Szary_jasny_w.png')"
+               class="w-full object-cover aspect-[3/4] group-hover:scale-105 transition-transform duration-500" />
+        </div>
+        <p class="mt-2 text-sm font-medium text-center text-charcoal">Szary</p>
+      </div>
+
+      <!-- Orzech -->
+      <div class="color-tile-wrap cursor-pointer group" onclick="selectColor(this)">
+        <div class="color-tile-border overflow-hidden rounded-2xl border-2 border-transparent
+                    group-hover:border-wood-light transition-colors duration-200 bg-gray-50">
+          <img src="images/Drewno retro.png" alt="Orzech"
+               onclick="event.stopPropagation(); openLb('images/Drewno retro.png')"
+               class="w-full object-cover aspect-[3/4] group-hover:scale-105 transition-transform duration-500" />
+        </div>
+        <p class="mt-2 text-sm font-medium text-center text-charcoal">Orzech</p>
+      </div>
+
+      <!-- Dąb -->
+      <div class="color-tile-wrap cursor-pointer group" onclick="selectColor(this)">
+        <div class="color-tile-border overflow-hidden rounded-2xl border-2 border-transparent
+                    group-hover:border-wood-light transition-colors duration-200 bg-gray-50">
+          <img src="images/Dąb San Marino.png" alt="Dąb"
+               onclick="event.stopPropagation(); openLb('images/Dąb San Marino.png')"
+               class="w-full object-cover aspect-[3/4] group-hover:scale-105 transition-transform duration-500" />
+        </div>
+        <p class="mt-2 text-sm font-medium text-center text-charcoal">Dąb</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── NASZE PRODUKTY ── -->
+<section id="galeria" class="max-w-6xl mx-auto px-5 py-14">
+  <div class="max-w-2xl mb-10 mx-auto text-center">
+    <h2 class="text-2xl md:text-3xl font-light text-charcoal mb-6">Nasze produkty</h2>
+    <p class="text-wood-dark/70 text-[15px] leading-relaxed mb-5">
+      Współpracujemy wyłącznie z rzemieślnikami, którzy łączą tradycyjne techniki stolarskie
+      z nowoczesnymi metodami produkcji. Dzięki temu każdy blat:
+    </p>
+    <ul class="space-y-1 mb-6 text-[15px] text-wood-dark/70">
+      <li>— jest wykonany z dbałością o detale,</li>
+      <li>— powstaje z certyfikowanego, odpowiednio sezonowanego drewna,</li>
+      <li>— przechodzi kontrolę jakości na każdym etapie,</li>
+      <li>— zachowuje naturalny charakter i trwałość, których nie da się osiągnąć w produkcji masowej.</li>
+    </ul>
+    <p class="text-wood-dark/70 text-[15px] leading-relaxed">
+      Polska produkcja to nie tylko gwarancja jakości, ale też krótsze terminy realizacji,
+      możliwość pełnej personalizacji oraz pewność, że każdy element powstaje lokalnie
+      z poszanowaniem materiału i rzemiosła.
+    </p>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+    <div class="overflow-hidden rounded-xl cursor-pointer group" onclick="openLb('images/Galeria1.jpg')">
+      <img src="images/Galeria1.jpg" alt="Biurko Barro – galeria 1" class="w-full object-cover aspect-[4/3] group-hover:scale-105 transition-transform duration-500" />
+    </div>
+    <div class="overflow-hidden rounded-xl cursor-pointer group" onclick="openLb('images/Galeria2.jpg')">
+      <img src="images/Galeria2.jpg" alt="Biurko Barro – galeria 2" class="w-full object-cover aspect-[4/3] group-hover:scale-105 transition-transform duration-500" />
+    </div>
+    <div class="overflow-hidden rounded-xl cursor-pointer group" onclick="openLb('images/Galeria3.jpg')">
+      <img src="images/Galeria3.jpg" alt="Biurko Barro – galeria 3" class="w-full object-cover aspect-[4/3] group-hover:scale-105 transition-transform duration-500" />
+    </div>
+    <div class="overflow-hidden rounded-xl cursor-pointer group" onclick="openLb('images/Galeria4.jpg')">
+      <img src="images/Galeria4.jpg" alt="Biurko Barro – galeria 4" class="w-full object-cover aspect-[4/3] group-hover:scale-105 transition-transform duration-500" />
+    </div>
+    <div class="overflow-hidden rounded-xl cursor-pointer group" onclick="openLb('images/Galeria5.jpg')">
+      <img src="images/Galeria5.jpg" alt="Biurko Barro – galeria 5" class="w-full object-cover aspect-[4/3] group-hover:scale-105 transition-transform duration-500" />
+    </div>
+    <div class="overflow-hidden rounded-xl cursor-pointer group" onclick="openLb('images/Galeria6.jpg')">
+      <img src="images/Galeria6.jpg" alt="Biurko Barro – galeria 6" class="w-full object-cover aspect-[4/3] group-hover:scale-105 transition-transform duration-500" />
+    </div>
+  </div>
+</section>
+
+<!-- ── AKCESORIA ── -->
+<section id="akcesoria" class="max-w-5xl mx-auto px-5 py-16">
+  <h2 class="text-2xl md:text-3xl font-light text-charcoal mb-1 text-center">Akcesoria</h2>
+  <p class="text-wood-dark/55 text-sm mb-10 text-center">Opcjonalne dodatki dostępne przy zamówieniu.</p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- Media port -->
+    <div class="bg-white rounded-2xl overflow-hidden border border-wood-light/20">
+      <div class="overflow-hidden cursor-pointer aspect-video"
+           onclick="openLb('images/Mediaport otwarty.png')">
+        <img src="images/Mediaport otwarty.png" alt="Panel media port – otwarte złącza"
+             class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+      </div>
+      <div class="p-5 md:p-6">
+        <h3 class="font-semibold text-[15px] mb-1 text-center">Panel Media Port</h3>
+        <p class="text-wood-dark/60 text-sm leading-relaxed mb-3 text-center">
+          Wbudowany w blat panel z pełnym zestawem złączy. Koniec z kablami na biurku — wszystko schowane, dostępne kiedy potrzebujesz.
+        </p>
+        <ul class="text-sm text-wood-dark/65 space-y-1 text-center">
+          <li>· 2× gniazdo 230V</li>
+          <li>· USB-C + 2× USB-A</li>
+          <li>· HDMI · LAN</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Panel regulacji -->
+    <div class="bg-white rounded-2xl overflow-hidden border border-wood-light/20">
+      <div class="overflow-hidden cursor-pointer aspect-video"
+           onclick="openLb('images/Panel.png')">
+        <img src="images/Panel.png" alt="Panel regulacji wysokości z wyświetlaczem LED"
+             class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+      </div>
+      <div class="p-5 md:p-6">
+        <h3 class="font-semibold text-[15px] mb-1 text-center">Elektryczna regulacja wysokości</h3>
+        <p class="text-wood-dark/60 text-sm leading-relaxed mb-3 text-center">
+          Cichy silnik elektryczny z wyświetlaczem LED pokazującym wysokość w centymetrach. Praca siedząca i stojąca jednym dotknięciem.
+        </p>
+        <ul class="text-sm text-wood-dark/65 space-y-1 text-center">
+          <li>· 4 zapisywalne pozycje pamięci</li>
+          <li>· Wyświetlacz wysokości w cm</li>
+          <li>· Cicha praca silnika</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── CENNIK ── -->
+<section id="cennik" class="bg-white py-16 px-5">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-2xl md:text-3xl font-light text-charcoal mb-10 text-center">Cennik</h2>
+
+    <div class="max-w-2xl mx-auto divide-y divide-wood-light/30 border-t border-wood-light/30">
+
+      <div class="flex justify-between items-start py-5">
+        <div>
+          <p class="font-medium text-[15px]">Stelaż (czarny lub biały)</p>
+          <p class="text-sm text-wood-dark/55 mt-0.5">Stalowy, elektryczna regulacja wysokości, 4 pozycje pamięci</p>
+        </div>
+        <span class="font-semibold text-lg ml-8 whitespace-nowrap tabular-nums">1 350 zł</span>
+      </div>
+
+      <div class="flex justify-between items-start py-5">
+        <div>
+          <p class="font-medium text-[15px]">Blat 140 × 80 cm</p>
+        </div>
+        <span class="font-semibold text-lg ml-8 whitespace-nowrap tabular-nums">500 zł</span>
+      </div>
+
+      <div class="flex justify-between items-start py-5">
+        <div>
+          <p class="font-medium text-[15px]">Blat 160 × 80 cm</p>
+        </div>
+        <span class="font-semibold text-lg ml-8 whitespace-nowrap tabular-nums">650 zł</span>
+      </div>
+
+      <div class="flex justify-between items-start py-5">
+        <div>
+          <p class="font-medium text-[15px]">Mediaport</p>
+          <p class="text-sm text-wood-dark/55 mt-0.5">2× 230V, USB-C, USB-A, HDMI, LAN</p>
+        </div>
+        <span class="font-semibold text-lg ml-8 whitespace-nowrap tabular-nums">450 zł</span>
+      </div>
+
+      <div class="flex justify-between items-start py-5">
+        <div>
+          <p class="font-medium text-[15px]">Inne rozmiary</p>
+          <p class="text-sm text-wood-dark/55 mt-0.5">Wymiary niestandardowe na zamówienie</p>
+        </div>
+        <span class="text-wood-dark/45 text-[15px] ml-8 whitespace-nowrap">wycena indywidualna</span>
+      </div>
+
+    </div>
+
+    <p class="text-[15px] text-wood-dark/50 mt-5 max-w-2xl mx-auto text-center">
+      Przy zamówieniu powyżej 50 szt. dowolny kolor blatu dostępny w standardowej cenie.
+    </p>
+
+  </div>
+</section>
+
+<!-- ── KONTAKT ── -->
+<section id="kontakt" class="bg-white py-16 px-5">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-2xl md:text-3xl font-light text-charcoal mb-10 text-center">Kontakt</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-2xl mx-auto text-center">
+
+      <div>
+        <p class="text-[10px] font-medium tracking-widest uppercase text-wood-dark/50 mb-2">Firma</p>
+        <p class="font-medium text-[15px]">Złotnicki Sp. z o.o.</p>
+        <p class="text-sm text-wood-dark/60 mt-1 leading-relaxed">
+          ul. Łódzka 57<br />95-050 Konstantynów Łódzki<br />NIP: 727-284-29-00
+        </p>
+      </div>
+
+      <div>
+        <p class="text-[10px] font-medium tracking-widest uppercase text-wood-dark/50 mb-2">Telefon</p>
+        <a href="tel:+48512158135"
+           class="font-medium text-[15px] hover:text-wood transition-colors">
+          +48 512 158 135
+        </a>
+      </div>
+
+      <div>
+        <p class="text-[10px] font-medium tracking-widest uppercase text-wood-dark/50 mb-2">E-mail</p>
+        <a href="mailto:info@barro.pl"
+           class="font-medium text-[15px] hover:text-wood transition-colors">
+          info@barro.pl
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="border-t border-wood-light/30 py-8 text-center">
+  <img src="images/Barro.png" alt="Barro" class="h-8 w-auto mx-auto mb-3 opacity-55" />
+  <p class="text-wood-dark/40 text-xs">&copy; 2026 Złotnicki Sp. z o.o. · Wszelkie prawa zastrzeżone</p>
+</footer>
+
+<!-- ── SCRIPTS ── -->
+<script>
+  // Mobile nav
+  document.getElementById('menu-btn').addEventListener('click', () => {
+    document.getElementById('mobile-nav').classList.toggle('hidden');
+  });
+  function closeMobileNav() {
+    document.getElementById('mobile-nav').classList.add('hidden');
+  }
+
+  // Lightbox
+  const lightbox = document.getElementById('lightbox');
+  const lbImg    = document.getElementById('lb-img');
+
+  function openLb(src) {
+    lbImg.src = src;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLb() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('lb-close').addEventListener('click', closeLb);
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLb(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+  // Color tile selection
+  function selectColor(el) {
+    document.querySelectorAll('.color-tile-wrap').forEach(t => t.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+</script>
+
+</body>
+</html>

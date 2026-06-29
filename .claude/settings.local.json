@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080)",
+      "Bash(ls \"\\\\\\\\wsl.localhost\\\\ubuntu\\\\home\\\\marek\\\\workspace\\\\barro-strona\\\\images\\\\\")",
+      "Bash(wsl -e python3 --version)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(~/venv-rembg/bin/python3 -)",
+      "Bash(ip addr *)",
+      "Bash(python3 -m http.server 8080 --bind 0.0.0.0)"
+    ]
+  }
+}

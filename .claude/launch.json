@@ -1,0 +1,11 @@
+﻿{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "barro-static",
+      "runtimeExecutable": "wsl",
+      "runtimeArgs": ["-e", "python3", "-m", "http.server", "8787", "--directory", "/home/marek/workspace/barro-strona"],
+      "port": 8787
+    }
+  ]
+}
