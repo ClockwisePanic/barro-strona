@@ -7,7 +7,11 @@
       "mcp__Claude_Preview__preview_start",
       "Bash(~/venv-rembg/bin/python3 -)",
       "Bash(ip addr *)",
-      "Bash(python3 -m http.server 8080 --bind 0.0.0.0)"
+      "Bash(python3 -m http.server 8080 --bind 0.0.0.0)",
+      "Bash(rm /home/marek/workspace/barro-strona/remove_bg.py && echo \"ok\")"
+    ],
+    "additionalDirectories": [
+      "/home/marek/workspace/barro-strona"
     ]
   }
 }
